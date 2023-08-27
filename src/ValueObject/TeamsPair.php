@@ -25,4 +25,12 @@ final class TeamsPair implements ValueObject
         return $this->away;
     }
 
+    public function isEqual(TeamsPair $teamsPair): bool
+    {
+        if ($teamsPair->getHome() === $this->getHome() && $teamsPair->getAway() === $this->getAway()) {
+            return true;
+        }
+
+        return false;
+    }
 }
