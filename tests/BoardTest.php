@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use ScoreBoard\Board;
 use ScoreBoard\Entity\Game;
@@ -14,14 +13,14 @@ final class BoardTest extends TestCase
 {
     public function testInit(): void
     {
-        $class = new Board(new ArrayCollection());
+        $class = new Board(new \Ds\Vector());
 
         $this->assertInstanceOf(Board::class, $class);
     }
 
     public function testStartGame(): void
     {
-        $class = new Board(new ArrayCollection());
+        $class = new Board(new \Ds\Vector());
         $team = new TeamsPair('Mexico', 'Canada');
         $game = new Game(
             $team,
@@ -36,7 +35,7 @@ final class BoardTest extends TestCase
 
     public function testUpdateScoreForNonExistsGame(): void
     {
-        $class = new Board(new ArrayCollection());
+        $class = new Board(new \Ds\Vector());
         $game = new TeamsPair('Mexico', 'Canada');
         $newScore = new ScoresPair(1, 0);
 
@@ -47,7 +46,7 @@ final class BoardTest extends TestCase
 
     public function testGetExistsGame(): void
     {
-        $class = new Board(new ArrayCollection());
+        $class = new Board(new \Ds\Vector());
         $team = new TeamsPair('Mexico', 'Canada');
         $game = new Game(
             $team,
@@ -62,7 +61,7 @@ final class BoardTest extends TestCase
 
     public function testAddThisSameGameTwice(): void
     {
-        $class = new Board(new ArrayCollection());
+        $class = new Board(new \Ds\Vector());
         $team = new TeamsPair('Mexico', 'Canada');
         $game = new Game(
             $team,
@@ -77,7 +76,7 @@ final class BoardTest extends TestCase
 
     public function testFinishGame(): void
     {
-        $class = new Board(new ArrayCollection());
+        $class = new Board(new \Ds\Vector());
         $team = new TeamsPair('Mexico', 'Canada');
         $game = new Game(
             $team,
@@ -91,7 +90,7 @@ final class BoardTest extends TestCase
 
     public function testFinishNonExistsGame(): void
     {
-        $class = new Board(new ArrayCollection());
+        $class = new Board(new \Ds\Vector());
         $team = new TeamsPair('Mexico', 'Canada');
 
         $this->expectException(\DomainException::class);
@@ -101,7 +100,7 @@ final class BoardTest extends TestCase
 
     public function testUpdateScore(): void
     {
-        $class = new Board(new ArrayCollection());
+        $class = new Board(new \Ds\Vector());
         $team = new TeamsPair('Mexico', 'Canada');
         $game = new Game(
             $team,

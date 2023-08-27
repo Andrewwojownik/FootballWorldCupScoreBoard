@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace ScoreBoard;
 
-use Doctrine\Common\Collections\Collection;
 use ScoreBoard\Entity\Game;
 use ScoreBoard\ValueObject\ScoresPair;
 use ScoreBoard\ValueObject\TeamsPair;
@@ -12,58 +11,64 @@ final class Board
 {
 
     public function __construct(
-        /**
-         * @var Collection<int, Game>
-         */
-        private readonly Collection $board,
+        private readonly \Ds\Vector $board,
     )
     {
     }
 
     public function startGame(Game $game): void
     {
-        if ($this->getGame($game->getTeams())) {
+        $gameIndex = null;
+        try {
+            $gameIndex = $this->getGameIndex($game->getTeams());
+        } catch (\DomainException $e) {
+        }
+
+        if (null !== $gameIndex) {
             throw new \DomainException('Game for this teams already started!');
         }
 
-        $this->board->add($game);
+        $this->board->push($game);
     }
 
     public function updateGameScore(TeamsPair $teamsPair, ScoresPair $scoresPair): void
     {
+        $gameIndex = $this->getGameIndex($teamsPair);
+
+        $this->board->set($gameIndex, new Game($teamsPair, $scoresPair));
+    }
+
+    private function getGameIndex(TeamsPair $teamsPair): int
+    {
+        $gameIndex = null;
+
         /**
-         * @var Game $game
+         * @var $game Game
          */
         foreach ($this->board as $key => $game) {
             if ($game->getTeams()->isEqual($teamsPair)) {
-                $this->board->remove($key);
-                $this->board->add(new Game($teamsPair, $scoresPair));
-                return;
+                $gameIndex = $key;
+                break;
             }
         }
 
-        throw new \DomainException('Can\'t update score for non exists teams!');
+        if (null === $gameIndex) {
+            throw new \DomainException('Can\'t get non exists game!');
+        }
+
+        return $gameIndex;
     }
 
-    public function getGame(TeamsPair $teamsPair): ?Game
+    public function getGame(TeamsPair $teamsPair): Game
     {
-        return $this->board->findFirst(function (int $key, Game $game) use ($teamsPair): bool {
-            return $game->getTeams()->isEqual($teamsPair);
-        });
+        $gameIndex = $this->getGameIndex($teamsPair);
+        return $this->board->get($gameIndex);
     }
 
     public function finishGame(TeamsPair $teamsPair): void
     {
-        /**
-         * @var Game $game
-         */
-        foreach ($this->board as $game) {
-            if ($game->getTeams()->isEqual($teamsPair)) {
-                $this->board->removeElement($game);
-                return;
-            }
-        }
+        $gameIndex = $this->getGameIndex($teamsPair);
 
-        throw new \DomainException('Can\'t finish non exists game!');
+        $this->board->remove($gameIndex);
     }
 }
