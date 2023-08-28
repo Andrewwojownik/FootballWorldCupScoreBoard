@@ -71,4 +71,11 @@ final class Board
 
         $this->board->remove($gameIndex);
     }
+
+    public function getSortedBoard(): array
+    {
+        return $this->board->sorted(function (Game $a, Game $b) {
+            return $b->getScore()->getTotalScore() >= $a->getScore()->getTotalScore();
+        })->toArray();
+    }
 }

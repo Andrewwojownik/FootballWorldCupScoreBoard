@@ -118,4 +118,36 @@ final class BoardTest extends TestCase
 
         $this->assertEquals($gameAfterChange, $findGame);
     }
+
+    public function testGetSortedBoard(): void
+    {
+        $class = new Board(new \Ds\Vector());
+        $game1 = new Game(
+            new TeamsPair('Mexico', 'Canada'),
+            new ScoresPair(0, 2),
+        );
+        $game2 = new Game(
+            new TeamsPair('France', 'Poland'),
+            new ScoresPair(0, 2),
+        );
+        $game3 = new Game(
+            new TeamsPair('Spain', 'Portugal'),
+            new ScoresPair(4, 2),
+        );
+        $game4 = new Game(
+            new TeamsPair('Japan', 'Grece'),
+            new ScoresPair(3, 2),
+        );
+
+        $class->startGame($game1);
+        $class->startGame($game2);
+        $class->startGame($game3);
+        $class->startGame($game4);
+        $sorted = $class->getSortedBoard();
+
+        $this->assertTrue($sorted[0]->getTeams()->isEqual(new TeamsPair('Spain', 'Portugal')));
+        $this->assertTrue($sorted[1]->getTeams()->isEqual(new TeamsPair('Japan', 'Grece')));
+        $this->assertTrue($sorted[2]->getTeams()->isEqual(new TeamsPair('Mexico', 'Canada')));
+        $this->assertTrue($sorted[3]->getTeams()->isEqual(new TeamsPair('France', 'Poland')));
+    }
 }

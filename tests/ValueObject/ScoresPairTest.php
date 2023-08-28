@@ -15,4 +15,11 @@ final class ScoresPairTest extends TestCase
         $this->assertEquals(0, $class->getHome());
         $this->assertEquals(1, $class->getAway());
     }
+
+    public function testGetTotalScore(): void
+    {
+        $class = new ScoresPair(3, 4);
+
+        $this->assertEquals(7, $class->getTotalScore());
+    }
 }

@@ -25,4 +25,9 @@ final class ScoresPair implements ValueObject
         return $this->away;
     }
 
+    public function getTotalScore(): int
+    {
+        return $this->home + $this->away;
+    }
+
 }
