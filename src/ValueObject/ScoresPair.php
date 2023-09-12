@@ -13,6 +13,18 @@ final class ScoresPair implements ValueObject
         private readonly int $away,
     )
     {
+        $this->guard();
+    }
+
+    private function guard(): void
+    {
+        if ($this->home < 0) {
+            throw new \DomainException('Score can not be lower than 0 for home team');
+        }
+
+        if ($this->away < 0) {
+            throw new \DomainException('Score can not be lower than 0 for away team');
+        }
     }
 
     public function getHome(): int

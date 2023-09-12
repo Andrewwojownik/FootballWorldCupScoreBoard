@@ -22,4 +22,16 @@ final class ScoresPairTest extends TestCase
 
         $this->assertEquals(7, $class->getTotalScore());
     }
+
+    public function testGuardLowerThanZeroHome(): void
+    {
+        $this->expectException(\DomainException::class);
+        new ScoresPair(-1, 4);
+    }
+
+    public function testGuardLowerThanZeroAway(): void
+    {
+        $this->expectException(\DomainException::class);
+        new ScoresPair(3, -2);
+    }
 }

@@ -13,6 +13,18 @@ final class TeamsPair implements ValueObject
         private readonly string $away,
     )
     {
+        $this->guard();
+    }
+
+    private function guard(): void
+    {
+        if ($this->home == '') {
+            throw new \DomainException('Name can not be empty for home team');
+        }
+
+        if ($this->away == '') {
+            throw new \DomainException('Name can not be empty for away team');
+        }
     }
 
     public function getHome(): string

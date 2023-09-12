@@ -15,4 +15,16 @@ final class TeamsPairTest extends TestCase
         $this->assertEquals('Mexico', $class->getHome());
         $this->assertEquals('Canada', $class->getAway());
     }
+
+    public function testGuardForTeamHome(): void
+    {
+        $this->expectException(\DomainException::class);
+        new TeamsPair('', 'Mexico');
+    }
+
+    public function testGuardForTeamAway(): void
+    {
+        $this->expectException(\DomainException::class);
+        new TeamsPair('Canada', '');
+    }
 }
